@@ -8,6 +8,37 @@ def string():
     print("type: {}, len: {}".format(type(mb), len(mb)))
     print(mb.decode("utf-8"))
 
+import time
+def consumer(prod: list):
+    while True:
+        if(len(prod)==0):
+            # 让出
+            yield
+        else:
+            print("consumer:...")
+            print("\t", end='')
+            for n in prod:
+                time.sleep(0.5)
+                print(n, end=' ', flush=True)
+            print()
+            prod.clear()
+
+def producer(c, prod: list):
+    n=0
+    while True:
+        if(len(prod)>4):
+            # 通知 consumer 消费并让出
+            next(c)
+        else:
+            print("producer: prepare {}".format(n))
+            time.sleep(0.3)
+            prod.append(n)          
+            n+=1
+
+prod=[]
+c=consumer(prod)
+producer(c, prod)
+
 # Get 营销活动 by http/https GET/POST from 源达云
 import requests
 
@@ -16,12 +47,13 @@ class Yxhd(object):
     daohang="/ydhxgtest/YingXiaoHuoDong/GuangGaoWeiPC/DaoHang"
 
 def test():
-    r1=requests.get("http://non-exist.com")
-    print("{}: {}".format( r1, r1.reason))
-    r1=requests.get("http://www.baidu.com")
-    print("{}: {}".format( r1, r1.reason))
-    r1=requests.get("https://www.baidu.com")
-    print("{}: {}".format( r1, r1.reason))
+    urls=[]
+    urls.append("http://non-exist.com")
+    urls.append("http://www.baidu.com")
+    urls.append("https://www.baidu.com")
+    for url in urls:
+        r1=requests.get(url)
+        print("Request {}\n\t{}: {}".format(url, r1, r1.reason))
 
 def daohang():
     node="/node/get?path="
@@ -59,8 +91,6 @@ def fail():
     print(r1.text) 
     print(r1.request.body)
 
-daohang()
-daohang2()
 # subscribe 涨停炸板 by websocket/websockets
 # grpc
 
