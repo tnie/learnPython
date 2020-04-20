@@ -10,34 +10,31 @@ def string():
 
 import time
 def consumer():
-    """消费者作为生成器"""    
-    prod=[]
+    """消费者作为生成器"""
+    prod=yield
     while True:
-        if(len(prod)==0):
-            # 让出
-            yield prod
-        else:
-            print("consumer:...")
-            print("\t", end='')
-            for n in prod:
-                time.sleep(0.5)
-                print(n, end=' ', flush=True)
-            print()
-            prod.clear()
+        print("consumer:...")
+        print("\t", end='')
+        for n in prod:
+            time.sleep(0.5)
+            print(n, end=' ', flush=True)
+        print()
+        prod.clear()
+        prod=yield prod
 
 def producer(c: consumer):
     """生产者作为普通函数"""
     n=0
-    prod = next(c)
+    prod = []
+    c.send(None)
     while True:
-        if(len(prod)>4):
-            # 通知 consumer 消费并让出
-            prod = next(c)
-        else:
+        # 通知 consumer 消费并让出
+        for i in range(5):
             print("producer: prepare {}".format(n))
             time.sleep(0.3)
-            prod.append(n)          
+            prod.append(n)
             n+=1
+        prod=c.send(prod)
 
 c=consumer()
 producer(c)
@@ -75,7 +72,7 @@ def daohang2():
     print("jdata's type: {}".format(type(jdata)))
     r1 = requests.post(url, jdata)
     print("使用 POST 获取营销活动的导航页：{}，内容：".format(r1))
-    print(r1.text) 
+    print(r1.text)
     print("{}: {}\n".format(type(r1.request.body), r1.request.body))
 
     msg =json.loads(r1.text)
@@ -91,10 +88,8 @@ def fail():
     print(json.dumps(data))
     r1 = requests.post(url, None, json.dumps(data))
     print("使用 POST 获取营销活动的导航页：{}，内容：".format(r1))
-    print(r1.text) 
+    print(r1.text)
     print(r1.request.body)
 
 # subscribe 涨停炸板 by websocket/websockets
 # grpc
-
-
