@@ -9,11 +9,13 @@ def string():
     print(mb.decode("utf-8"))
 
 import time
-def consumer(prod: list):
+def consumer():
+    """消费者作为生成器"""    
+    prod=[]
     while True:
         if(len(prod)==0):
             # 让出
-            yield
+            yield prod
         else:
             print("consumer:...")
             print("\t", end='')
@@ -23,21 +25,22 @@ def consumer(prod: list):
             print()
             prod.clear()
 
-def producer(c, prod: list):
+def producer(c: consumer):
+    """生产者作为普通函数"""
     n=0
+    prod = next(c)
     while True:
         if(len(prod)>4):
             # 通知 consumer 消费并让出
-            next(c)
+            prod = next(c)
         else:
             print("producer: prepare {}".format(n))
             time.sleep(0.3)
             prod.append(n)          
             n+=1
 
-prod=[]
-c=consumer(prod)
-producer(c, prod)
+c=consumer()
+producer(c)
 
 # Get 营销活动 by http/https GET/POST from 源达云
 import requests
