@@ -34,10 +34,18 @@ def producer(c: consumer):
             time.sleep(0.3)
             prod.append(n)
             n+=1
-        c.send(prod)
+        c.send(prod)    # next(c)
+        if(n>8):
+            c.close()   # 如果不关闭，则 45-46 行就不会抛出异常
+            break
 
 c=consumer()
 producer(c)
+try:
+    c.send([])
+    c.send(list(range(100,105)))
+except StopIteration as e:
+    print("StopIteration: {}".format(e))
 
 # Get 营销活动 by http/https GET/POST from 源达云
 import requests
