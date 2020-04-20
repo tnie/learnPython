@@ -11,8 +11,8 @@ def string():
 import time
 def consumer():
     """消费者作为生成器"""
-    prod=yield
     while True:
+        prod=yield
         print("consumer:... from {}".format(id(prod)))
         print("\t", end='')
         for n in prod:
@@ -20,7 +20,6 @@ def consumer():
             print(n, end=' ', flush=True)
         print()
         prod.clear()
-        prod=yield prod
 
 def producer(c: consumer):
     """生产者作为普通函数"""
@@ -35,7 +34,7 @@ def producer(c: consumer):
             time.sleep(0.3)
             prod.append(n)
             n+=1
-        prod=c.send(prod)
+        c.send(prod)
 
 c=consumer()
 producer(c)
