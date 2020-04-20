@@ -13,7 +13,7 @@ def consumer():
     """消费者作为生成器"""
     prod=yield
     while True:
-        print("consumer:...")
+        print("consumer:... from {}".format(id(prod)))
         print("\t", end='')
         for n in prod:
             time.sleep(0.5)
@@ -29,6 +29,7 @@ def producer(c: consumer):
     c.send(None)
     while True:
         # 通知 consumer 消费并让出
+        print("use prod@{}".format(id(prod)))
         for i in range(5):
             print("producer: prepare {}".format(n))
             time.sleep(0.3)
