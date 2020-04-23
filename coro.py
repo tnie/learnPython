@@ -20,7 +20,7 @@ def producer(c: consumer):
     while True:
         # 通知 consumer 消费并让出
         print("use prod@{}".format(id(prod)))
-        for i in range(5):
+        for _ in range(5):
             print("producer: prepare {}".format(n))
             time.sleep(0.3)
             prod.append(n)
