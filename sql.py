@@ -1,9 +1,8 @@
 import pymysql
+from sensitive.config import CygpDb
 
-conn=pymysql.connect(host='222.223.238.158', port=3306, user='cygp4_test',
-        password='GF6aBm8FbN7Xf4Ff',
-        db='cygp4_test',
-        charset='utf8')
+# CygpDb is a dict
+conn=pymysql.connect(**CygpDb)
 
 cursor=conn.cursor()
 cursor.execute('SELECT COUNT(*) FROM niel_tmp')

@@ -1,3 +1,5 @@
+
+# conda install websocket-client
 import websocket
 try:
     import thread
@@ -6,10 +8,11 @@ except ImportError:
 import json
 import requests
 import time
+from sensitive.config import Login
 
 def login():
     url='https://cs-hxg-api.zslxt.com/api/hxg/pc/v1/login'
-    data='username=ydhxgys124&password=250799&device_id=00-FF-3B-AB-2F-5F'
+    data='username={}&password={}&device_id={}'.format(Login.user, Login.password, Login.device)
     r1=requests.post(url, data=data)
     print("Request {}\n\t{}: {}".format(url, r1, r1.reason))
     print("使用 POST 获取营销活动的导航页：{}，内容：".format(r1))
@@ -72,7 +75,7 @@ def on_open(ws):
 
     thread.start_new_thread(run, ())
 
-url='wss://yun.ydtg.com.cn?username=niel&password=123'
+url='wss://yun.ydtg.com.cn'
 ws =websocket.WebSocketApp(url, on_message=on_message,
     on_close=on_close,
     on_error=on_error)

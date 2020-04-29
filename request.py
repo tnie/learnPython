@@ -2,6 +2,11 @@
 # Get 营销活动 by http/https GET/POST from 源达云
 import requests
 import json
+from sensitive.config import Yxhd
+
+class Yxhd_sample:
+    host="host"
+    daohang="page"
 
 def test():
     urls=("http://non-exist.com", "http://www.baidu.com" ,"https://www.baidu.com")
@@ -9,17 +14,15 @@ def test():
         r1=requests.get(url)
         print("Request {}\n\t{}: {}".format(url, r1, r1.reason))
 
-class Yxhd():
-    host="http://yun.ydtg.com.cn"
-    daohang="/ydhxgtest/YingXiaoHuoDong/GuangGaoWeiPC/DaoHang"
-
 def daohang():
+    """使用 get 方式获取"""
     node="/node/get?path="
     r1=requests.get(Yxhd.host+node+Yxhd.daohang)
     print("获取营销活动的导航页：{}，内容：".format(r1))
     print(r1.text)   # 通信返回 200，内容是 404 —— 无力吐槽
 
 def daohang2():
+    """使用 post 方式获取"""
     data={"api":"/get", "nodePath": Yxhd.daohang}
     url = Yxhd.host + "/node/sdkapi?token=niel"
     r1 = requests.post(url, json=data)
