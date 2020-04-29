@@ -41,12 +41,8 @@ def on_close(ws):
     print('#### closed ###')
 
 def subMsg(cmd, node):
-    msg={}
-    msg['cmd']=cmd
-    user={}
-    user['groups']=[{'group_id': node}]
-    msg['user']=user
-    msg['path']=node
+    user={'groups': [{'group_id': node}]}
+    msg={'cmd': cmd,'user':user, 'path':node}
     return msg
 
 def unused_variable(var):
@@ -54,8 +50,7 @@ def unused_variable(var):
 
 def insert(ws, node, content):
     '''Failed. How?'''
-    msg={'cmd':33}
-    msg["path"]=node
+    msg={'cmd':33,"path":node}
     msg["json"]=json.dumps(msg)
     str=json.dumps(msg)
     print(str)
