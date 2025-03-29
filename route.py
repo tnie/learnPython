@@ -16,5 +16,8 @@ def get_waypoint_route(origin: str, destination:str,
         destination_longitude(float): 目的地的经度" },
         destination_latitude(float):  目的地的经度" }
     '''
-    return ((1,2), (2,3))
+
+    origin = (origin_longitude, origin_latitude)
+    destination = (destination_longitude, destination_latitude)
+    return (origin, (1,2), (2,3), (3,4), (4,5), destination)
     pass
