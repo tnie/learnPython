@@ -2,6 +2,13 @@ from route import get_waypoint_route
 from mob import get_mob_location
 from weather import get_current_weather
 
+def transcribe(audio:str = "./speech/1743306875018.mp3") -> str:
+    import whisper
+    model = whisper.load_model("small")
+    result = model.transcribe(audio)
+    # print(result)
+    return result["text"]
+
 def chain():
     import os
     if os.system("ping 192.168.50.1 -n 2"):
@@ -25,7 +32,7 @@ def chain():
 
 def tellme(query: str):
     print('<< ' + query)
-    if(query.isspace()):
+    if(not query.strip()):
         return print("do nothing.")
     llm = chain()
     from langchain_core.messages import (HumanMessage, SystemMessage)
@@ -58,5 +65,16 @@ def tellme(query: str):
 if __name__ == "__main__" :
     import sys
     query = "".join(sys.argv[1:])
+    if(query.endswith(".mp3")):
+        query = transcribe(query)
     tellme(query)
+    
+    [
+        "我想去大连",
+        "制作去塘沽港5号码头的航线",
+        "怎么从长兴岛去大连港邮轮中心",
+        "怎么从东经111.11°北纬33°33.33′去大连港邮轮中心",
+        "制作一条从大连港邮轮中心去东经111.11°北纬33°33.33′的航线",
+        "怎么从东经111.11°北纬33°33.33′去东经112.22°北纬34°33.33′",
+    ]
     
